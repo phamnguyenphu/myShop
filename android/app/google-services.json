@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "718811808810",
+    "project_id": "myshop-kltn",
+    "storage_bucket": "myshop-kltn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718811808810:android:fd87f9f283b988e44e6f53",
+        "android_client_info": {
+          "package_name": "com.myshop.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "718811808810-l903mh4115amp3s47v539s4ff3jrd6bc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyOvYkshzb4yFdBlaEUdTBdslW9bKQDcA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "718811808810-l903mh4115amp3s47v539s4ff3jrd6bc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
