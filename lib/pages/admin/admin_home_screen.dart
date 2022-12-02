@@ -21,11 +21,11 @@ class AdminHomeScreen extends StatelessWidget {
           children: [
             UserAccountsDrawerHeader(
               accountName:
-                  Text(FirebaseAuth.instance.currentUser!.displayName!),
-              accountEmail: Text(FirebaseAuth.instance.currentUser!.email!),
+                  Text(FirebaseAuth.instance.currentUser!.displayName ?? ""),
+              accountEmail: Text(FirebaseAuth.instance.currentUser!.email ?? ""),
               currentAccountPicture: CircleAvatar(
                 backgroundImage: CachedNetworkImageProvider(
-                    FirebaseAuth.instance.currentUser!.photoURL!),
+                    FirebaseAuth.instance.currentUser!.photoURL ?? ""),
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),

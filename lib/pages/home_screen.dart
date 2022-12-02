@@ -69,6 +69,7 @@ class HomeScreenState extends State<HomeScreen> {
                   Text(FirebaseAuth.instance.currentUser!.email ?? ""),
               currentAccountPicture: CircleAvatar(
                 backgroundImage: CachedNetworkImageProvider(
+
                     FirebaseAuth.instance.currentUser!.photoURL ?? ""),
               ),
               decoration: BoxDecoration(

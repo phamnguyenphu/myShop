@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myshop/config/theme.dart';
@@ -8,6 +9,7 @@ import 'package:myshop/pages/cart_screen.dart';
 import 'package:myshop/pages/edit_my_address_screen.dart';
 import 'package:myshop/pages/edit_my_phone_screen.dart';
 import 'package:myshop/pages/home_screen.dart';
+import 'package:myshop/pages/register_screen.dart';
 import 'package:myshop/pages/shop_by_category_screen.dart';
 import 'package:myshop/pages/splash_screen.dart';
 import 'package:myshop/pages/admin/admin_home_screen.dart';
@@ -18,14 +20,20 @@ import 'package:myshop/pages/admin/products_screen.dart';
 import 'package:myshop/pages/admin/shop_details.dart';
 import 'package:myshop/pages/admin/user_details_screen.dart';
 
-import 'firebase_options.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await Firebase.initializeApp(
-      name: "My fresh shop",
-        options: DefaultFirebaseOptions.currentPlatform);
+    print(kIsWeb);
+    if (kIsWeb) {
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyBBsa8kXpz2MkXpJqgTmvyl26UKOiHvbS4",
+            appId: "1:718811808810:web:322d51588d7cd45b4e6f53",
+            messagingSenderId: "718811808810",
+            projectId: "myshop-kltn"),
+      );
+    }
+    await Firebase.initializeApp();
   } catch (e) {
     debugPrint(e.toString());
   }
@@ -60,6 +68,7 @@ class App extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => const SplashScreen(),
+        "/register": (context) => const RegisterScreen(),
         "/admin": (context) => const AdminHomeScreen(),
         "/admin_orders": (context) => const OrdersScreenAdmin(),
         "/home": (context) => const HomeScreen(),
