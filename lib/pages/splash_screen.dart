@@ -211,6 +211,7 @@ class SplashScreenState extends State<SplashScreen> {
               child: ElevatedButton(
                 onPressed: () async {
                   final user = await signIn(_email.text, _password.text);
+                  checkUserAuth();
                   print(user!.user);
                   print("LOGIN");
                 },

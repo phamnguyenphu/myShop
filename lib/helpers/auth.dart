@@ -56,22 +56,18 @@ Future<UserCredential?> registerAccount(String emailUser, String passwordUser,
       email: emailUser,
       password: passwordUser,
     );
-    // await credential.user?.updatePhoneNumber(phoneUser as PhoneAuthCredential);
-    // await credential.user?.updateDisplayName(displayNameUser);
-    // await credential.user?.updatePhotoURL(
-    //     "https://www.humanesociety.org/sites/default/files/styles/1240x698/public/2020-07/kitten-510651.jpg?h=f54c7448&itok=ZhplzyJ9");
-    // final FirebaseFirestore firestore = FirebaseFirestore.instance;
-    // await firestore.collection("users").doc(credential.user!.uid).set(
-    //   {
-    //     "displayName": displayNameUser,
-    //     "email": credential.user!.email,
-    //     "photoUrl": credential.user!.photoURL,
-    //     "isAdmin": false,
-    //     "uid": credential.user!.uid,
-    //     "phone": phoneUser,
-    //   },
-    //   SetOptions(merge: true),
-    // );
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    await firestore.collection("users").doc(credential.user!.uid).set(
+      {
+        "displayName": displayNameUser,
+        "email": credential.user!.email,
+        "photoUrl": "",
+        "isAdmin": false,
+        "uid": credential.user!.uid,
+        "phone": phoneUser,
+      },
+      SetOptions(merge: true),
+    );
     return credential;
   } on FirebaseAuthException catch (e) {
     if (e.code == 'weak-password') {
@@ -82,20 +78,6 @@ Future<UserCredential?> registerAccount(String emailUser, String passwordUser,
   } catch (e) {
     print(e);
   }
-}
-Future<void> setDataUser(User? user) async {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  await firestore.collection("users").doc(user!.uid).set(
-    {
-      "displayName": user.displayName,
-      "email": user.email,
-      "photoUrl": user.photoURL,
-      "isAdmin": false,
-      "uid": user.uid,
-      "phone": user.phoneNumber,
-    },
-    SetOptions(merge: true),
-  );
 }
 
 void authStateChanges() {
