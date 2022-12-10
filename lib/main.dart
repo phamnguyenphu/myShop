@@ -23,7 +23,6 @@ import 'package:myshop/pages/admin/user_details_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    print(kIsWeb);
     if (kIsWeb) {
       await Firebase.initializeApp(
         options: const FirebaseOptions(
