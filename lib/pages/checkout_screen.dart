@@ -125,6 +125,10 @@ class CheckoutScreenState extends State<CheckoutScreen> {
     }
   }
 
+  onBtnVisaPay() {
+    print("visa pay");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,6 +209,19 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                               child: const Text("Self Pickup"),
                             ),
                           ],
+
+                          if (visaPay == true) ...[
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                onBtnVisaPay();
+                              },
+                              child: const Text("Visa / Master Card"),
+                            ),
+                          ],
+
                         ],
                       ),
                     ),
@@ -266,4 +283,6 @@ class CheckoutScreenState extends State<CheckoutScreen> {
             ),
     );
   }
+
+
 }

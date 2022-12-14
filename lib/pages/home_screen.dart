@@ -70,7 +70,7 @@ class HomeScreenState extends State<HomeScreen> {
               currentAccountPicture: CircleAvatar(
                 backgroundImage: CachedNetworkImageProvider(
 
-                    FirebaseAuth.instance.currentUser!.photoURL ?? ""),
+                    FirebaseAuth.instance.currentUser!.photoURL ?? 'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png'),
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),

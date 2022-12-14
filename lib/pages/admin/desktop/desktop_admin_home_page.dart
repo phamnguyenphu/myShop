@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -38,8 +36,9 @@ class DesktopAdminHomeScreen extends StatelessWidget {
                       accountEmail:
                           Text(FirebaseAuth.instance.currentUser!.email ?? ""),
                       currentAccountPicture: CircleAvatar(
-                        backgroundImage: CachedNetworkImageProvider(
-                            FirebaseAuth.instance.currentUser!.photoURL ?? "https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png"),
+                        backgroundImage: CachedNetworkImageProvider(FirebaseAuth
+                                .instance.currentUser!.photoURL ??
+                            "https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png"),
                       ),
                       decoration: const BoxDecoration(
                         color: primaryColor,
