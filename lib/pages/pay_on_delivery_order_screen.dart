@@ -14,6 +14,7 @@ class PayOnDeliveryOrderScreen extends StatefulWidget {
   final int tax;
   final double taxAmount;
   final double total;
+  final bool isPayOnline;
 
   const PayOnDeliveryOrderScreen(
       {required this.cart,
@@ -21,6 +22,7 @@ class PayOnDeliveryOrderScreen extends StatefulWidget {
       required this.tax,
       required this.taxAmount,
       required this.total,
+      required this.isPayOnline,
       Key? key})
       : super(key: key);
 
@@ -77,44 +79,87 @@ class PayOnDeliveryOrderScreenState extends State<PayOnDeliveryOrderScreen> {
     String address = _addressController.text;
     String phone = _phoneController.text;
 
+
     if (address.isNotEmpty && phone.isNotEmpty) {
-      try {
-        setState(() {
-          _isLoading = true;
-        });
-        DocumentReference ref = await addOrderPayOnDelivery(
-          widget.cart,
-          widget.cartItemsTotal,
-          widget.tax,
-          widget.taxAmount,
-          widget.total,
-          addressType,
-          address,
-          phone,
-        );
-        await clearCart();
-        setState(() {
-          _isLoading = false;
-        });
-        String orderId = ref.id;
-        if (!mounted) return;
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OrderPlacedScreen(
-              orderId: orderId,
-              orderMethod: "payOnDelivery",
+      if (widget.isPayOnline == true) {
+        try {
+          setState(() {
+            _isLoading = true;
+          });
+          DocumentReference ref = await addOrderPayVisaCard(
+            widget.cart,
+            widget.cartItemsTotal,
+            widget.tax,
+            widget.taxAmount,
+            widget.total,
+            addressType,
+            address,
+            phone,
+          );
+          await clearCart();
+          setState(() {
+            _isLoading = false;
+          });
+          String orderId = ref.id;
+          if (!mounted) return;
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OrderPlacedScreen(
+                orderId: orderId,
+                orderMethod: "payOnDelivery",
+              ),
             ),
-          ),
-          ModalRoute.withName("/home"),
-        );
-      } catch (e) {
-        debugPrint(e.toString());
-        showMyDialog(
-          context: context,
-          title: "oops",
-          description: "Something went wrong, try after some time!",
-        );
+            ModalRoute.withName("/home"),
+          );
+        } catch (e) {
+          debugPrint(e.toString());
+          showMyDialog(
+            context: context,
+            title: "oops",
+            description: "Something went wrong, try after some time!",
+          );
+        }
+      }
+      else {
+        try {
+          setState(() {
+            _isLoading = true;
+          });
+          DocumentReference ref = await addOrderPayOnDelivery(
+            widget.cart,
+            widget.cartItemsTotal,
+            widget.tax,
+            widget.taxAmount,
+            widget.total,
+            addressType,
+            address,
+            phone,
+          );
+          await clearCart();
+          setState(() {
+            _isLoading = false;
+          });
+          String orderId = ref.id;
+          if (!mounted) return;
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OrderPlacedScreen(
+                orderId: orderId,
+                orderMethod: "payOnDelivery",
+              ),
+            ),
+            ModalRoute.withName("/home"),
+          );
+        } catch (e) {
+          debugPrint(e.toString());
+          showMyDialog(
+            context: context,
+            title: "oops",
+            description: "Something went wrong, try after some time!",
+          );
+        }
       }
     } else {
       showMyDialog(

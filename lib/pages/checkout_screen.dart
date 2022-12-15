@@ -88,6 +88,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
           tax: tax,
           taxAmount: taxAmount,
           total: total,
+          isPayOnline: false,
         ),
       ),
     );
@@ -126,7 +127,19 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   onBtnVisaPay() {
-    print("visa pay");
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PayOnDeliveryOrderScreen(
+          cart: widget.cart,
+          cartItemsTotal: cartItemsTotal,
+          tax: tax,
+          taxAmount: taxAmount,
+          total: total,
+          isPayOnline: true,
+        ),
+      ),
+    );
   }
 
   @override
