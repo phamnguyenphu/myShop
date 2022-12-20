@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:myshop/config/theme.dart';
 import 'package:myshop/pages/about_shop_details.dart';
 import 'package:myshop/pages/cart_screen.dart';
@@ -23,7 +22,6 @@ import 'package:myshop/pages/admin/user_details_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Stripe.publishableKey = 'pk_test_51K7c3jLZFf69SCa4UmIugNRO6W3vNQ5FXRo6EfhkWd4OOZjiIBhFID1bz1j59qv2QuJdQVf4xYwFSkXnuo6kQ2JH002Yp4txgs';
   try {
     if (kIsWeb) {
       await Firebase.initializeApp(
