@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:myshop/components/my_dialog.dart';
 import 'package:myshop/config/colors.dart';
 import 'package:myshop/config/currency.dart';
@@ -10,6 +13,9 @@ import 'package:myshop/helpers/order.dart';
 import 'package:myshop/helpers/shop.dart';
 import 'package:myshop/pages/order_placed_screen.dart';
 import 'package:myshop/pages/pay_on_delivery_order_screen.dart';
+import 'package:http/http.dart' as http;
+
+import '../config/strings.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final List cart;
@@ -21,6 +27,7 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class CheckoutScreenState extends State<CheckoutScreen> {
+  Map<String, dynamic>? paymentIntent;
   bool _loading = true;
   double cartItemsTotal = 0;
   double total = 0;
@@ -142,6 +149,98 @@ class CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
+  Future<void> makePayment() async {
+    try {
+      paymentIntent = await createPaymentIntent('10', 'USD');
+      //Payment Sheet
+      await Stripe.instance.initPaymentSheet(
+          paymentSheetParameters: SetupPaymentSheetParameters(
+              paymentIntentClientSecret: paymentIntent!['client_secret'],
+              // applePay: const PaymentSheetApplePay(merchantCountryCode: '+92',),
+              // googlePay: const PaymentSheetGooglePay(testEnv: true, currencyCode: "US", merchantCountryCode: "+92"),
+              style: ThemeMode.dark,
+              merchantDisplayName: 'Adnan')).then((value){
+      });
+
+
+      ///now finally display payment sheeet
+      displayPaymentSheet();
+    } catch (e, s) {
+      print('exception:$e$s');
+    }
+  }
+
+  createPaymentIntent(String amount, String currency) async {
+    try {
+      Map<String, dynamic> body = {
+        'amount': calculateAmount(amount),
+        'currency': currency,
+        'payment_method_types[]': 'card'
+      };
+
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization': 'Bearer $SECRET_KEY',
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: body,
+      );
+      // ignore: avoid_print
+      print('Payment Intent Body->>> ${response.body.toString()}');
+      return jsonDecode(response.body);
+    } catch (err) {
+      // ignore: avoid_print
+      print('err charging user: ${err.toString()}');
+    }
+  }
+
+  displayPaymentSheet() async {
+
+    try {
+      await Stripe.instance.presentPaymentSheet(
+      ).then((value){
+        showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: const [
+                      Icon(Icons.check_circle, color: Colors.green,),
+                      Text("Payment Successfull"),
+                    ],
+                  ),
+                ],
+              ),
+            ));
+        // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("paid successfully")));
+
+        paymentIntent = null;
+
+      }).onError((error, stackTrace){
+        print('Error is:--->$error $stackTrace');
+      });
+
+
+    } on StripeException catch (e) {
+      print('Error is:---> $e');
+      showDialog(
+          context: context,
+          builder: (_) => const AlertDialog(
+            content: Text("Cancelled "),
+          ));
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  calculateAmount(String amount) {
+    final calculatedAmout = (int.parse(amount)) * 100 ;
+    return calculatedAmout.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -228,7 +327,8 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                               height: 10,
                             ),
                             ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
+                                await makePayment();
                                 onBtnVisaPay();
                               },
                               child: const Text("Visa / Master Card"),
