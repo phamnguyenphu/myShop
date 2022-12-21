@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -6,6 +7,9 @@ import 'package:myshop/components/product_card.dart';
 import 'package:myshop/config/colors.dart';
 import 'package:myshop/helpers/product.dart';
 import 'package:myshop/pages/product_view_screen.dart';
+
+import '../helpers/category.dart';
+import 'category_products_screen.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -19,6 +23,7 @@ class HomeTabState extends State<HomeTab> {
   bool _isEmpty = false;
 
   List<QueryDocumentSnapshot> products = [];
+  List<DocumentSnapshot> categories = [];
   late QueryDocumentSnapshot lastDocument;
 
   final ScrollController _scrollController = ScrollController();
@@ -50,12 +55,14 @@ class HomeTabState extends State<HomeTab> {
     });
 
     QuerySnapshot qsnap = await getProducts();
-    if (qsnap.size > 0) {
+    QuerySnapshot qSnapCate = await getCategories();
+    if (qsnap.size > 0 && qSnapCate.size > 0) {
       if (mounted) {
         setState(() {
           _isLoading = false;
           _isEmpty = false;
           products = qsnap.docs;
+          categories = qSnapCate.docs;
           lastDocument = qsnap.docs.last;
         });
       }
@@ -79,8 +86,50 @@ class HomeTabState extends State<HomeTab> {
     }
   }
 
+  final List<String> imgList = [
+    'https://img.pikbest.com/origin/05/84/47/30DpIkbEsTXtA.jpg!w700wp',
+    'https://cdn.shopify.com/s/files/1/0817/8783/files/raw-roasted.png?v=1613668002',
+    'https://previews.123rf.com/images/makc76/makc761801/makc76180100216/94356558-summer-fruit-banner-with-a-discount-bright-juice-background-for-discount-offers.jpg',
+    'https://img.freepik.com/premium-psd/fresh-milk-product-sale-social-media-banner-instagram-post-design-template_237357-201.jpg?w=2000',
+    'https://assets1.chainstoreage.com/styles/primary_articles_short/s3/2019-11/Produce_fresh_veggies_0.jpg?itok=2YEI5kQ4',
+    'https://thumbs.dreamstime.com/b/special-offer-christmas-sale-up-to-off-red-discount-banner-garland-present-cookies-glass-milk-santa-special-192341968.jpg',
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final List<Widget> imageSliders = imgList
+        .map((item) => Container(
+              child: Container(
+                margin: EdgeInsets.all(5.0),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    child: Stack(
+                      children: <Widget>[
+                        Image.network(item, fit: BoxFit.cover, width: 1000.0),
+                        Positioned(
+                          bottom: 0.0,
+                          left: 0.0,
+                          right: 0.0,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color.fromARGB(200, 0, 0, 0),
+                                  Color.fromARGB(0, 0, 0, 0)
+                                ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              ),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 20.0),
+                          ),
+                        ),
+                      ],
+                    )),
+              ),
+            ))
+        .toList();
     if (_isLoading == true) {
       return const Center(
         child: SpinKitChasingDots(
@@ -96,27 +145,134 @@ class HomeTabState extends State<HomeTab> {
           onRefresh: () async {
             return loadProducts();
           },
-          child: ListView.separated(
-            controller: _scrollController,
-            itemCount: products.length,
-            separatorBuilder: (ctx, i) {
-              return const Divider();
-            },
-            itemBuilder: (ctx, i) {
-              return ProductCard(
-                product: products[i],
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProductViewScreen(
-                        document: products[i],
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CarouselSlider(
+                  options: CarouselOptions(
+                    aspectRatio: 2.0,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: false,
+                    initialPage: 2,
+                    autoPlay: false,
+                  ),
+                  items: imageSliders,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Category",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
                       ),
                     ),
-                  );
-                },
-              );
-            },
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/shop_by_category");
+                      },
+                      child: const Text(
+                        "See More",
+                        style: TextStyle(color: Color(0xFFBBBBBB)),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 12.0),
+                  alignment: Alignment.centerLeft,
+                  height: 100,
+                  child: GridView.count(
+                    childAspectRatio: 3 / 4,
+                    shrinkWrap: true,
+                    crossAxisCount: 1,
+                    mainAxisSpacing: 15,
+                    scrollDirection: Axis.horizontal,
+                    children: categories.map((category) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CategoryProductsScreen(category: category),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          //margin: const EdgeInsets.all(5),
+                          // padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: accentColor,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Center(
+                            child: Text(
+                              category.id,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Featured Products",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Text(
+                        "See More",
+                        style: TextStyle(color: Color(0xFFBBBBBB)),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                Expanded(
+                  child: ListView.separated(
+                    controller: _scrollController,
+                    itemCount: products.length,
+                    separatorBuilder: (ctx, i) {
+                      return const Divider();
+                    },
+                    itemBuilder: (ctx, i) {
+                      return ProductCard(
+                        product: products[i],
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductViewScreen(
+                                document: products[i],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       }

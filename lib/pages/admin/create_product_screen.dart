@@ -12,6 +12,7 @@ import 'package:myshop/config/currency.dart';
 import 'package:myshop/config/image_upload.dart';
 import 'package:myshop/helpers/category.dart';
 import 'package:myshop/helpers/product.dart';
+
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as path;
 
@@ -38,6 +39,7 @@ class CreateProductScreenState extends State<CreateProductScreen> {
   TextEditingController priceController = TextEditingController();
   TextEditingController salePriceController = TextEditingController();
   bool isFeatured = true;
+
   // product fields
 
   @override
@@ -150,6 +152,7 @@ class CreateProductScreenState extends State<CreateProductScreen> {
           color: Colors.transparent,
           child: ListView(
             children: [
+              // check hasImage ? Image.asset(path) :
               ListTile(
                 leading: const Icon(Icons.camera_alt),
                 title: const Text("Take a Picture from Camera"),
@@ -192,16 +195,23 @@ class CreateProductScreenState extends State<CreateProductScreen> {
       // crop image
 
       CroppedFile? croppedFile = await ImageCropper().cropImage(
-        sourcePath: tempFile!.path,
-        compressQuality: compressQuality,
-        compressFormat: ImageCompressFormat.jpg,
-        maxHeight: maxHeight,
-        maxWidth: maxWidth,
-      );
+          sourcePath: tempFile!.path,
+          compressQuality: compressQuality,
+          compressFormat: ImageCompressFormat.jpg,
+          maxHeight: maxHeight,
+          maxWidth: maxWidth,
+          uiSettings: [
+            WebUiSettings(
+                context: context,
+                boundary: CroppieBoundary(height: 500, width: 400),
+                viewPort:
+                    CroppieViewPort(width: 300, height: 250, type: 'square'),
+                enableZoom: true)
+          ]);
       if (croppedFile != null) {
         final path = croppedFile.path;
         File cFile = File(path);
-        debugPrint(cFile.lengthSync().toString());
+        // debugPrint(cFile.lengthSync().toString());
 
         setState(() {
           _productImage = cFile;

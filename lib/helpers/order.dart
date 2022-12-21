@@ -32,6 +32,33 @@ Future<DocumentReference> addOrderPayOnDelivery(
   });
 }
 
+Future<DocumentReference> addOrderPayVisaCard(
+    List cart,
+    double cartItemsTotal,
+    int tax,
+    double taxAmount,
+    double total,
+    String addressType,
+    String address,
+    String phone) async {
+  return await firestore.collection("orders").add({
+    "uid": user!.uid,
+    "paymentMethod": "payOnVisaCard",
+    "orderStatus": "ordered", // ordered, delivering, delivered, cancelled
+    "paymentStatus": "Paid", // notPaid, paid
+    "addressType": addressType,
+    "address": address,
+    "phone": phone,
+    "created_at": FieldValue.serverTimestamp(),
+    "updated_at": FieldValue.serverTimestamp(),
+    "cart": cart,
+    "cartItemsTotal": cartItemsTotal,
+    "tax": tax,
+    "taxAmount": taxAmount,
+    "total": total
+  });
+}
+
 Future<DocumentReference> addOrderSelfPickup(
   List cart,
   double cartItemsTotal,
