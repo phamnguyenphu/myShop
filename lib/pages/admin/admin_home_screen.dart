@@ -42,13 +42,6 @@ class AdminHomeScreen extends StatelessWidget {
                 ),
                 ListTile(
                   onTap: () {
-                    Navigator.pushNamed(context, "/home");
-                  },
-                  title: const Text("Goto to Buyer Mode"),
-                  leading: const Icon(EvaIcons.shoppingCartOutline),
-                ),
-                ListTile(
-                  onTap: () {
                     Navigator.pushNamed(context, "/manage_products");
                   },
                   title: const Text("Manage Products"),

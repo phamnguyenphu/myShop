@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> addProductToCart(String id, Map<String, dynamic> data) async {
+Future<bool> addProductToCart(
+    String id, Map<String, dynamic> data, int quantity) async {
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    dynamic productsList = [];
+    List productsList = [];
+    bool isAdd = true;
 
     dynamic productToSave = {
       "id": id,
@@ -15,6 +17,7 @@ Future<void> addProductToCart(String id, Map<String, dynamic> data) async {
       "productImage": data["productImage"],
       "price": data["price"],
       "salePrice": data["salePrice"],
+      "quantity": quantity,
     };
 
     // get exsisting products
@@ -24,14 +27,24 @@ Future<void> addProductToCart(String id, Map<String, dynamic> data) async {
     if (products != '' && products.isNotEmpty) {
       productsList = json.decode(products);
     }
+    for (var item in productsList) {
+      if (item['id'] == productToSave['id']) {
+        item["quantity"]++;
+        isAdd = false;
+      }
+    }
 
-    productsList.add(productToSave);
+    if (isAdd == true) {
+      productsList.add(productToSave);
+    }
 
     // save
     String cart = json.encode(productsList);
 
     await prefs.setString("cart", cart);
+    return isAdd;
   } catch (e) {
+    return false;
     debugPrint(e.toString());
   }
 }

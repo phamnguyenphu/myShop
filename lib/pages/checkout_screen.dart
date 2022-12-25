@@ -48,7 +48,9 @@ class CheckoutScreenState extends State<CheckoutScreen> {
 
     for (var c in cart) {
       double salePrice = c["salePrice"];
-      cartTotal += salePrice;
+      int quantity = c["quantity"];
+      cartTotal += salePrice*quantity;
+      //cartTotal += salePrice;
     }
 
     cartTotal = double.parse(cartTotal.toStringAsFixed(2));
@@ -151,7 +153,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
 
   Future<void> makePayment() async {
     try {
-      paymentIntent = await createPaymentIntent('10', 'USD');
+      paymentIntent = await createPaymentIntent(total.toString(), 'USD');
       //Payment Sheet
       await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(

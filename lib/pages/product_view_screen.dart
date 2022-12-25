@@ -11,18 +11,33 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class ProductViewScreen extends StatelessWidget {
   final DocumentSnapshot document;
+
   const ProductViewScreen({required this.document, Key? key}) : super(key: key);
 
+  void _showAlertAddProduct(
+      BuildContext context, String title, IconData iconData) {
+    StatusAlert.show(context,
+        title: title,
+        subtitle: "Go to cart for checkout",
+        configuration: IconConfiguration(icon: iconData),
+        duration: const Duration(seconds: 1));
+  }
+
   _addProductToCartBtnTap(context) async {
-    await addProductToCart(
-        document.id, document.data() as Map<String, dynamic>);
-    StatusAlert.show(
-      context,
-      title: "Added to Cart",
-      subtitle: "Go to cart for checkout",
-      configuration: const IconConfiguration(icon: Icons.done),
-      duration: const Duration(seconds: 4),
-    );
+    var checkProduct = await addProductToCart(
+        document.id, document.data() as Map<String, dynamic>, 1);
+    if (checkProduct) {
+      _showAlertAddProduct(context, "Added to Cart", Icons.done);
+    } else {
+      _showAlertAddProduct(context, "Plus one unit", Icons.add);
+    }
+    // StatusAlert.show(
+    //   context,
+    //   title: "Added to Cart",
+    //   subtitle: "Go to cart for checkout",
+    //   configuration: const IconConfiguration(icon: Icons.done),
+    //   duration: const Duration(seconds: 4),
+    // );
   }
 
   @override

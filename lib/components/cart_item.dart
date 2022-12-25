@@ -15,8 +15,7 @@ class CartItem extends StatefulWidget {
 }
 
 class _CartItemState extends State<CartItem> {
-  int count = 1;
-
+  bool isDisable = true;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -98,9 +97,9 @@ class _CartItemState extends State<CartItem> {
                                 size: 10,
                                 color: Colors.black.withOpacity(0.5),
                               ),
-                              onPressed: () {
+                              onPressed: widget.product["quantity"] == 1 ? null : () {
                                 setState(() {
-                                  count--;
+                                  widget.product["quantity"]--;
                                 });
                               },
                             ),
@@ -121,7 +120,7 @@ class _CartItemState extends State<CartItem> {
                         const SizedBox(
                           width: 10,
                         ),
-                        Text("$count"),
+                        Text(widget.product["quantity"].toString()),
                         const SizedBox(
                           width: 10,
                         ),
@@ -141,7 +140,7 @@ class _CartItemState extends State<CartItem> {
                               ),
                               onPressed: () {
                                 setState(() {
-                                  count++;
+                                  widget.product["quantity"]++;
                                 });
                               },
                             ),
