@@ -46,13 +46,6 @@ class DesktopAdminHomeScreen extends StatelessWidget {
                     ),
                     ListTile(
                       onTap: () {
-                        Navigator.pushNamed(context, "/home");
-                      },
-                      title: const Text("Goto to Buyer Mode"),
-                      leading: const Icon(EvaIcons.shoppingCartOutline),
-                    ),
-                    ListTile(
-                      onTap: () {
                         Navigator.pushNamed(context, "/manage_products");
                       },
                       title: const Text("Manage Products"),
@@ -78,6 +71,13 @@ class DesktopAdminHomeScreen extends StatelessWidget {
                       },
                       title: const Text("Manage Users"),
                       leading: const Icon(EvaIcons.person),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/search_screen");
+                      },
+                      title: const Text("Search Products"),
+                      leading: const Icon(EvaIcons.search),
                     ),
                     ListTile(
                       onTap: () {

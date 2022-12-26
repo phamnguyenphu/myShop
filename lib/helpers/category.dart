@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-Future<void> createCategory(String title) async {
+Future<void> createCategory(String title, String url) async {
   return await firestore.collection("categories").doc(title).set({
     "title": title,
+    "url": url
   }, SetOptions(merge: true));
 }
 

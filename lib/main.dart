@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:myshop/config/theme.dart';
 import 'package:myshop/pages/about_shop_details.dart';
+import 'package:myshop/pages/admin/desktop/search_screen.dart';
+import 'package:myshop/pages/all_products_screen.dart';
 import 'package:myshop/pages/cart_screen.dart';
 import 'package:myshop/pages/edit_my_address_screen.dart';
 import 'package:myshop/pages/edit_my_phone_screen.dart';
@@ -73,6 +75,8 @@ class App extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => const SplashScreen(),
+        "/search_screen": (context) => const SearchScreen(),
+        "/all_product": (context) => const AllProductScreen(),
         "/register": (context) => const RegisterScreen(),
         "/admin": (context) => const AdminHomeScreen(),
         "/admin_orders": (context) => const OrdersScreenAdmin(),

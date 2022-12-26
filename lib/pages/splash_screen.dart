@@ -93,6 +93,7 @@ class SplashScreenState extends State<SplashScreen> {
       );
     }
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(),
       extendBodyBehindAppBar: true,
       body: Padding(
@@ -212,8 +213,6 @@ class SplashScreenState extends State<SplashScreen> {
                 onPressed: () async {
                   final user = await signIn(_email.text, _password.text);
                   checkUserAuth();
-                  print(user!.user);
-                  print("LOGIN");
                 },
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -254,6 +253,7 @@ class SplashScreenState extends State<SplashScreen> {
                       "photoURL": user.photoURL,
                       "uid": user.uid,
                     }, SetOptions(merge: true));
+                    checkUserAuth();
                   } catch (e) {
                     debugPrint(e.toString());
                   }

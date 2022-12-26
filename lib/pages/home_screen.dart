@@ -1,5 +1,6 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:myshop/pages/home_tab.dart';
 import 'package:myshop/pages/orders_tab.dart';
 import 'package:myshop/pages/search_tab.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import '../helpers/user.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -29,6 +32,7 @@ class HomeScreenState extends State<HomeScreen> {
     const OrdersTab(),
     const AccountTab()
   ];
+
   // tabs
 
   @override
@@ -63,14 +67,15 @@ class HomeScreenState extends State<HomeScreen> {
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
-              accountName:
-                  Text(FirebaseAuth.instance.currentUser!.displayName ?? ""),
+              accountName: Text(
+                  FirebaseAuth.instance.currentUser!.displayName ??
+                      "Phạm Nguyên Phú"),
               accountEmail:
                   Text(FirebaseAuth.instance.currentUser!.email ?? ""),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(
-
-                    FirebaseAuth.instance.currentUser!.photoURL ?? 'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png'),
+                backgroundImage: CachedNetworkImageProvider(FirebaseAuth
+                        .instance.currentUser!.photoURL ??
+                    'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png'),
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),

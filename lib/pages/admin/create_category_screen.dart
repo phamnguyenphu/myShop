@@ -11,9 +11,11 @@ class CreateCategoryScreen extends StatefulWidget {
 
 class CreateCategoryScreenState extends State<CreateCategoryScreen> {
   final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _urlController = TextEditingController();
   @override
   void dispose() {
     _titleController.dispose();
+    _urlController.dispose();
     super.dispose();
   }
 
@@ -37,13 +39,21 @@ class CreateCategoryScreenState extends State<CreateCategoryScreen> {
                 ),
                 maxLength: 60,
               ),
+              TextField(
+                controller: _urlController,
+                decoration: const InputDecoration(
+                  filled: true,
+                  labelText: "Url Image",
+                ),
+                maxLength: 60,
+              ),
               const SizedBox(
                 height: 20,
               ),
               ElevatedButton(
                 onPressed: () {
                   if (_titleController.text.isNotEmpty) {
-                    createCategory(_titleController.text).then((v) {
+                    createCategory(_titleController.text, _urlController.text).then((v) {
                       Navigator.pop(context, "added");
                     }).catchError((e) {
                       debugPrint(e.toString());

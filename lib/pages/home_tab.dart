@@ -185,16 +185,18 @@ class HomeTabState extends State<HomeTab> {
                   ],
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 12.0),
+                  margin: const EdgeInsets.symmetric(vertical: 12.0),
                   alignment: Alignment.centerLeft,
                   height: 100,
                   child: GridView.count(
-                    childAspectRatio: 3 / 4,
+                    childAspectRatio: 0.4,
                     shrinkWrap: true,
                     crossAxisCount: 1,
                     mainAxisSpacing: 15,
                     scrollDirection: Axis.horizontal,
                     children: categories.map((category) {
+                      Map<String, dynamic> cate =
+                          category.data() as Map<String, dynamic>;
                       return InkWell(
                         onTap: () {
                           Navigator.push(
@@ -205,18 +207,40 @@ class HomeTabState extends State<HomeTab> {
                             ),
                           );
                         },
-                        child: Container(
-                          //margin: const EdgeInsets.all(5),
-                          // padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: accentColor,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Center(
-                            child: Text(
-                              category.id,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Stack(children: [
+                            Container(
+                              //margin: const EdgeInsets.all(5),
+                              // padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(cate["url"])),
+                                color: accentColor,
+                                //borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
-                          ),
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    const Color(0xFF343434).withOpacity(0.7),
+                                    const Color(0xFF343434).withOpacity(0.4)
+                                  ],
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  category.id,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]),
                         ),
                       );
                     }).toList(),
@@ -236,7 +260,9 @@ class HomeTabState extends State<HomeTab> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, "/all_product");
+                      },
                       child: const Text(
                         "See More",
                         style: TextStyle(color: Color(0xFFBBBBBB)),
