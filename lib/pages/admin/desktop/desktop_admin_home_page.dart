@@ -1,8 +1,11 @@
+import 'dart:html';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:myshop/config/image_upload.dart';
 import 'package:myshop/helpers/order.dart';
 import 'package:myshop/helpers/product.dart';
@@ -94,7 +97,7 @@ class DesktopAdminHomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
+            const Expanded(
               child: DashboardScreen(),
             )
           ],
@@ -116,7 +119,9 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   List<DataChart> _chartData = [];
   List<DataCircularChart> _chartDataCircular = [];
+  List<SalesData> _chartDataLine = [];
   List<String> _categoryName = [];
+
   int ordered = 0;
   int delivering = 0;
   int delivered = 0;
@@ -126,6 +131,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     getCategoryChart();
     getBillOrderCount();
+    getLineChartData();
     // TODO: implement initState
     super.initState();
     //billOrderCount = getBillOrderCount();
@@ -178,6 +184,204 @@ class _DashboardScreenState extends State<DashboardScreen> {
             });
           }
         }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  getLineChartData() async {
+    try {
+      QuerySnapshot qSnapOrdered = await getOrders("ordered");
+      QuerySnapshot qSnapDelivering = await getOrders("delivering");
+      QuerySnapshot qSnapDeliverd = await getOrders("delivered");
+      if (qSnapOrdered.size > 0) {
+        List<DocumentSnapshot> orderList = qSnapOrdered.docs;
+        orderList.addAll(qSnapDelivering.docs);
+        orderList.addAll(qSnapDeliverd.docs);
+        //Month 1
+        var orderMonth1 = orderList.where(
+          (element) {
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+            DateTime createdAt = data['created_at'].toDate();
+            return createdAt.month == 1;
+          },
+        );
+        double salesmonth1 = 0;
+        orderMonth1.forEach((element) {
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+          salesmonth1 += data['total'];
+        });
+
+        //Month 2
+        var orderMonth2 = orderList.where(
+          (element) {
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+            DateTime createdAt = data['created_at'].toDate();
+            return createdAt.month == 2;
+          },
+        );
+        double salesmonth2 = 0;
+        orderMonth2.forEach((element) {
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+          salesmonth2 += data['total'];
+        });
+
+        //Month 3
+        var orderMonth3 = orderList.where(
+          (element) {
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+            DateTime createdAt = data['created_at'].toDate();
+            return createdAt.month == 3;
+          },
+        );
+        double salesmonth3 = 0;
+        orderMonth3.forEach((element) {
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+          salesmonth3 += data['total'];
+        });
+
+        //Month 4
+        var orderMonth4 = orderList.where(
+          (element) {
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+            DateTime createdAt = data['created_at'].toDate();
+            return createdAt.month == 4;
+          },
+        );
+        double salesmonth4 = 0;
+        orderMonth4.forEach((element) {
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+          salesmonth4 += data['total'];
+        });
+
+        //Month 5
+        var orderMonth5 = orderList.where(
+          (element) {
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+            DateTime createdAt = data['created_at'].toDate();
+            return createdAt.month == 5;
+          },
+        );
+        double salesmonth5 = 0;
+        orderMonth5.forEach((element) {
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+          salesmonth5 += data['total'];
+        });
+
+        //Month 6
+        var orderMonth6 = orderList.where(
+          (element) {
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+            DateTime createdAt = data['created_at'].toDate();
+            return createdAt.month == 6;
+          },
+        );
+        double salesmonth6 = 0;
+        orderMonth6.forEach((element) {
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+          salesmonth6 += data['total'];
+        });
+
+        //Month 7
+        var orderMonth7 = orderList.where(
+          (element) {
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+            DateTime createdAt = data['created_at'].toDate();
+            return createdAt.month == 7;
+          },
+        );
+        double salesmonth7 = 0;
+        orderMonth7.forEach((element) {
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+          salesmonth7 += data['total'];
+        });
+
+        //Month 8
+        var orderMonth8 = orderList.where(
+          (element) {
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+            DateTime createdAt = data['created_at'].toDate();
+            return createdAt.month == 8;
+          },
+        );
+        double salesmonth8 = 0;
+        orderMonth8.forEach((element) {
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+          salesmonth8 += data['total'];
+        });
+
+        //Month 9
+        var orderMonth9 = orderList.where(
+          (element) {
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+            DateTime createdAt = data['created_at'].toDate();
+            return createdAt.month == 9;
+          },
+        );
+        double salesmonth9 = 0;
+        orderMonth9.forEach((element) {
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+          salesmonth9 += data['total'];
+        });
+
+        //Month 10
+        var orderMonth10 = orderList.where(
+          (element) {
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+            DateTime createdAt = data['created_at'].toDate();
+            return createdAt.month == 10;
+          },
+        );
+        double salesmonth10 = 0;
+        orderMonth10.forEach((element) {
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+          salesmonth10 += data['total'];
+        });
+
+        //Month 11
+        var orderMonth11 = orderList.where(
+          (element) {
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+            DateTime createdAt = data['created_at'].toDate();
+            return createdAt.month == 11;
+          },
+        );
+        double salesmonth11 = 0;
+        orderMonth11.forEach((element) {
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+          salesmonth11 += data['total'];
+        });
+
+        //Month 12
+        var orderMonth12 = orderList.where(
+          (element) {
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+            DateTime createdAt = data['created_at'].toDate();
+            return createdAt.month == 12;
+          },
+        );
+        double salesmonth12 = 0;
+        orderMonth12.forEach((element) {
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
+          salesmonth12 += data['total'];
+        });
+        setState(() {
+          _chartDataLine = [
+            SalesData(month: 12, sales: salesmonth12),
+            SalesData(month: 11, sales: salesmonth11),
+            SalesData(month: 10, sales: salesmonth10),
+            SalesData(month: 9, sales: salesmonth9),
+            SalesData(month: 8, sales: salesmonth8),
+            SalesData(month: 7, sales: salesmonth7),
+            SalesData(month: 6, sales: salesmonth6),
+            SalesData(month: 5, sales: salesmonth5),
+            SalesData(month: 4, sales: salesmonth4),
+            SalesData(month: 3, sales: salesmonth3),
+            SalesData(month: 2, sales: salesmonth2),
+            SalesData(month: 1, sales: salesmonth1),
+          ];
+        });
       }
     } catch (e) {
       print(e);
@@ -259,9 +463,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(
               height: 40,
             ),
-            Text("My Chart", style: Theme.of(context).textTheme.subtitle1),
+            Row(
+              children: [
+                Text("My Chart", style: Theme.of(context).textTheme.subtitle1),
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: () {
+                    getBillOrderCount();
+                    getLineChartData();
+                  },
+                ),
+              ],
+            ),
             const SizedBox(
               height: 20,
+            ),
+            SfCartesianChart(
+              title: ChartTitle(text: "Sales of month"),
+              series: <ChartSeries>[
+                LineSeries<SalesData, double>(
+                  dataSource: _chartDataLine,
+                  xValueMapper: (SalesData sales, _) => sales.month,
+                  yValueMapper: (SalesData sales, _) => sales.sales,
+                  dataLabelSettings:
+                      DataLabelSettings(isVisible: true, opacity: 0.9),
+                ),
+              ],
+              primaryXAxis: NumericAxis(
+                  title: AxisTitle(text: "Month"),
+                  edgeLabelPlacement: EdgeLabelPlacement.shift,
+                  decimalPlaces: 0),
+              primaryYAxis: NumericAxis(
+                title: AxisTitle(text: "Sales"),
+                numberFormat: NumberFormat.simpleCurrency(decimalDigits: 2),
+              ),
+            ),
+            const SizedBox(
+              height: 40,
             ),
             SfCartesianChart(
               legend: Legend(isVisible: true),
@@ -319,4 +557,11 @@ class DataCircularChart {
 
   final String categoryProducts;
   final int countProduct;
+}
+
+class SalesData {
+  final double month;
+  final double sales;
+
+  SalesData({required this.month, required this.sales});
 }
